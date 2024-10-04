@@ -31,6 +31,15 @@
         font-weight: bold;
         margin-bottom: 10px;
     }
+    .cpp-section {
+        background-color: #e2f0d9;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .cpp-section h5 {
+        margin-bottom: 15px;
+    }
 </style>
 </head>
 <body>
@@ -104,6 +113,14 @@
                         <!-- Detalhamento será inserido aqui -->
                     </div>
                 </div>
+                <!-- Nova seção para o CPP devido pela UFJF -->
+                <div class="cpp-section">
+                    <h5>CPP devido pela UFJF</h5>
+                    <div id="cppValor">R$ 0,00</div>
+                    <p class="help-text mt-1">
+                        Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
+                    </p>
+                </div>
             </div>
             <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
                 <p class="help-text mb-3">
@@ -115,6 +132,15 @@
                     <input type="number" class="form-control" id="aliquotaAdicional" placeholder="Digite a alíquota adicional em %">
                     <p class="help-text mt-1">
                         Insira a alíquota adicional que pode ser ISSQN ou outra. Deixe em branco se não houver.
+                    </p>
+                </div>
+                <!-- Novo campo para CPP e outros -->
+                <h5 class="mb-3">CPP e outros</h5>
+                <div class="mb-3">
+                    <label class="form-label">CPP e outros (%)</label>
+                    <input type="number" class="form-control" id="cppAliquota" placeholder="Digite a alíquota do CPP e outros em % (padrão 20%)" value="20">
+                    <p class="help-text mt-1">
+                        Insira a alíquota referente ao CPP e outros encargos que a UFJF deverá recolher.
                     </p>
                 </div>
                 <h5 class="mb-3">Configurações INSS</h5>
@@ -165,7 +191,8 @@ $(document).ready(function() {
             { lower: 2826.66, upper: 3751.05, aliquota: 0.15, deducao: 381.44 },
             { lower: 3751.06, upper: 4664.68, aliquota: 0.225, deducao: 662.77 },
             { lower: 4664.69, upper: Infinity, aliquota: 0.275, deducao: 896.00 }
-        ]
+        ],
+        cppAliquota: 20 // Valor padrão de 20%
     };
 
     // Função para salvar configurações no localStorage
@@ -189,10 +216,12 @@ $(document).ready(function() {
         const salario = localStorage.getItem('salario');
         const modo = localStorage.getItem('modo');
         const aliquotaAdicional = localStorage.getItem('aliquotaAdicional');
+        const cppAliquota = localStorage.getItem('cppAliquota');
 
         if (salario) $('#salario').val(salario);
         if (modo) $(`input[name="modo"][id="${modo}"]`).prop('checked', true);
         if (aliquotaAdicional) $('#aliquotaAdicional').val(aliquotaAdicional);
+        if (cppAliquota) $('#cppAliquota').val(cppAliquota);
     }
 
     carregarFormulario();
@@ -256,8 +285,6 @@ $(document).ready(function() {
                                 <label class="form-label">Alíquota (decimal)</label>
                                 <input type="number" class="form-control irrf-aliquota" data-index="${index}" value="${faixa.aliquota}" step="0.001">
                             </div>
-                        </div>
-                        <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Dedução (R$)</label>
                                 <input type="number" class="form-control irrf-deducao" data-index="${index}" value="${faixa.deducao.toFixed(2)}" step="0.01">
@@ -300,6 +327,17 @@ $(document).ready(function() {
             }
         }
 
+        // Caso o valor seja maior que a última faixa
+        if (base > config.irrf[config.irrf.length - 1].lower) {
+            const faixa = config.irrf[config.irrf.length - 1];
+            const aliquotaPercent = (faixa.aliquota * 100).toFixed(1);
+            irrfTotal = base * faixa.aliquota - faixa.deducao;
+            
+        }
+
+        // Garantir que não seja negativo
+        irrfTotal = Math.max(0, irrfTotal);
+
         return { total: irrfTotal, detalhes: detalhes };
     }
 
@@ -314,6 +352,7 @@ $(document).ready(function() {
         localStorage.setItem('salario', $('#salario').val());
         localStorage.setItem('modo', modo);
         localStorage.setItem('aliquotaAdicional', aliquotaAdicionalInput);
+        localStorage.setItem('cppAliquota', $('#cppAliquota').val());
 
         let salarioBruto, salarioLiquido, inssObj, irrfObj, adicionalTotal;
         let detalhesCalculo = '';
@@ -366,6 +405,11 @@ $(document).ready(function() {
         $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
         $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
         $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
+
+        // Cálculo do CPP devido pela UFJF
+        const cppAliquota = parseFloat($('#cppAliquota').val()) / 100 || 0.2; // Valor padrão de 20%
+        const cppValor = salarioBruto * cppAliquota;
+        $('#cppValor').text(`R$ ${cppValor.toFixed(2)}`);
     }
 
     // Inicialização das configurações
@@ -373,7 +417,7 @@ $(document).ready(function() {
     atualizarConfigIRRF();
 
     // Event listeners para cálculo
-    $('#salario, input[name="modo"], #aliquotaAdicional').on('input change', function() {
+    $('#salario, input[name="modo"], #aliquotaAdicional, #cppAliquota').on('input change', function() {
         // Atualizar o rótulo e placeholder do campo de salário
         if ($('#calcularBruto').is(':checked')) {
             $('#labelSalario').text('Valor Líquido Desejado (R$)');
