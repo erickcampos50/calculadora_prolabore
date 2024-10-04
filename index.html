@@ -21,8 +21,15 @@
     }
     .calculation-steps {
         background-color: #f8f9fa;
-        padding: 15px;
+        padding: 20px;
         border-radius: 5px;
+    }
+    .calculation-section {
+        margin-bottom: 20px;
+    }
+    .calculation-section h6 {
+        font-weight: bold;
+        margin-bottom: 10px;
     }
 </style>
 </head>
@@ -30,7 +37,7 @@
 <div class="container mt-5">
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Calculadora de valores para pagamento de pessoa física</h5>
+        <h5 class="mb-0">Calculadora Avançada de Valores</h5>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="mostrarAjuda">
             <label class="form-check-label" for="mostrarAjuda">Mostrar Ajuda</label>
@@ -39,7 +46,7 @@
     <div class="card-body">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="calculo-tab" data-bs-toggle="tab" data-bs-target="#calculo" type="button" role="tab" aria-controls="calculo" aria-selected="true">Cálculo</button>
+                <button class="nav-link active" id="calculo-tab" data-bs-toggle="tab" data-bs-target="#calculo" type="button" role="tab" aria-controls="calculo" aria-selected="true">Calculadora</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab" aria-controls="config" aria-selected="false">Configurações</button>
@@ -48,14 +55,13 @@
         <div class="tab-content mt-3" id="myTabContent">
             <div class="tab-pane fade show active" id="calculo" role="tabpanel" aria-labelledby="calculo-tab">
                 <p class="help-text mb-3">
-                    Escolha o modo de cálculo: do valor bruto para o líquido ou vice-versa.
-                    Insira o valor conhecido e veja o resultado calculado automaticamente.
+                    Escolha a funcionalidade desejada: calcular o valor bruto a partir de um valor líquido desejado ou calcular o valor líquido a partir de um valor bruto informado.
                 </p>
                 <div class="btn-group mb-3" role="group" aria-label="Modo de cálculo">
-                    <input type="radio" class="btn-check" name="modo" id="modoLiquido" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary" for="modoLiquido">Calcular Bruto</label>
-                    <input type="radio" class="btn-check" name="modo" id="modoBruto" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="modoBruto">Calcular Líquido</label>
+                    <input type="radio" class="btn-check" name="modo" id="calcularBruto" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="calcularBruto">Calcular Valor Bruto</label>
+                    <input type="radio" class="btn-check" name="modo" id="calcularLiquido" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="calcularLiquido">Calcular Valor Líquido</label>
                 </div>
                 <div class="mb-3">
                     <label for="salario" class="form-label" id="labelSalario">Valor Líquido Desejado (R$)</label>
@@ -82,7 +88,7 @@
                     <label class="form-label">Desconto IRRF</label>
                     <div id="descontoIRRF">R$ 0,00</div>
                     <p class="help-text mt-1">
-                        Valor descontado para o Imposto de Renda, considerando a dedução conforme a tabela.
+                        Valor descontado para o Imposto de Renda, calculado progressivamente após a dedução do INSS.
                     </p>
                 </div>
                 <div class="mb-3">
@@ -93,8 +99,10 @@
                     </p>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Passo a Passo dos Cálculos</label>
-                    <div id="calculoDetalhado" class="calculation-steps"></div>
+                    <div id="calculoDetalhado" class="calculation-steps">
+                        <h5 class="text-primary">Detalhamento dos cálculos realizados</h5>
+                        <!-- Detalhamento será inserido aqui -->
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
@@ -130,7 +138,7 @@
         <div class="card-body">
             <h5 class="card-title">Créditos</h5>
             <p class="card-text">
-                Esta calculadora foi desenvolvida voluntariamente por erick.campos@ufjf.br.
+                Esta calculadora foi desenvolvida por Erick C. Campos (<a href="mailto:erick.campos@ufjf.br">erick.campos@ufjf.br</a>) para facilitar o cálculo do valor devido ao pagamento de pessoas físicas na UFJF.
             </p>
         </div>
     </div>
@@ -248,6 +256,8 @@ $(document).ready(function() {
                                 <label class="form-label">Alíquota (decimal)</label>
                                 <input type="number" class="form-control irrf-aliquota" data-index="${index}" value="${faixa.aliquota}" step="0.001">
                             </div>
+                        </div>
+                        <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Dedução (R$)</label>
                                 <input type="number" class="form-control irrf-deducao" data-index="${index}" value="${faixa.deducao.toFixed(2)}" step="0.01">
@@ -269,35 +279,26 @@ $(document).ready(function() {
                 const salarioFaixa = Math.min(salario, faixa.upper) - faixa.lower;
                 const contribuicao = salarioFaixa * faixa.aliquota;
                 inssTotal += contribuicao;
-                detalhes += `(${faixa.lower.toFixed(2)} - ${Math.min(salario, faixa.upper).toFixed(2)}) x ${(faixa.aliquota * 100).toFixed(1)}% = R$ ${contribuicao.toFixed(2)}<br>`;
+                detalhes += `(${faixa.lower.toFixed(2)} - ${faixa.upper === Infinity ? '∞' : faixa.upper.toFixed(2)}) x ${(faixa.aliquota * 100).toFixed(1)}% = R$ ${contribuicao.toFixed(2)}<br>`;
             }
         }
 
         return { total: inssTotal, detalhes: detalhes };
     }
 
-    // Função para calcular o IRRF considerando a dedução
-    function calcularIrrf(base) {
+    // Função para calcular o IRRF de forma detalhada semelhante ao INSS
+    function calcularIrrfDetalhado(base) {
         let irrfTotal = 0;
         let detalhes = '';
 
         for (const faixa of config.irrf) {
-            if (base >= faixa.lower && base <= faixa.upper) {
-                irrfTotal = base * faixa.aliquota - faixa.deducao;
-                detalhes += `Base x ${(faixa.aliquota * 100).toFixed(1)}% - Dedução R$ ${faixa.deducao.toFixed(2)} = R$ ${irrfTotal.toFixed(2)}<br>`;
-                break;
+            if (base > faixa.lower) {
+                const salarioFaixa = Math.min(base, faixa.upper) - faixa.lower;
+                const impostoFaixa = salarioFaixa * faixa.aliquota;
+                irrfTotal += impostoFaixa;
+                detalhes += `(${faixa.lower.toFixed(2)} - ${faixa.upper === Infinity ? '∞' : faixa.upper.toFixed(2)}) x ${(faixa.aliquota * 100).toFixed(1)}% = R$ ${impostoFaixa.toFixed(2)}<br>`;
             }
         }
-
-        // Caso o valor seja maior que a última faixa
-        if (base > config.irrf[config.irrf.length - 1].lower) {
-            const faixa = config.irrf[config.irrf.length - 1];
-            irrfTotal = base * faixa.aliquota - faixa.deducao;
-            detalhes += `Base x ${(faixa.aliquota * 100).toFixed(1)}% - Dedução R$ ${faixa.deducao.toFixed(2)} = R$ ${irrfTotal.toFixed(2)}<br>`;
-        }
-
-        // Garantir que não seja negativo
-        irrfTotal = Math.max(0, irrfTotal);
 
         return { total: irrfTotal, detalhes: detalhes };
     }
@@ -317,7 +318,7 @@ $(document).ready(function() {
         let salarioBruto, salarioLiquido, inssObj, irrfObj, adicionalTotal;
         let detalhesCalculo = '';
 
-        if (modo === 'modoLiquido') {
+        if (modo === 'calcularBruto') {
             salarioLiquido = valor;
             salarioBruto = salarioLiquido;
             let diferencaLiquido = Infinity;
@@ -326,8 +327,7 @@ $(document).ready(function() {
 
             while (Math.abs(diferencaLiquido) > 0.01 && iteracoes < maxIteracoes) {
                 inssObj = calcularInssProgressivo(salarioBruto);
-                const baseIRRF = salarioBruto - inssObj.total;
-                irrfObj = calcularIrrf(baseIRRF);
+                irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
                 adicionalTotal = salarioBruto * aliquotaAdicional;
                 const liquidoCalculado = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
                 diferencaLiquido = salarioLiquido - liquidoCalculado;
@@ -340,33 +340,32 @@ $(document).ready(function() {
                 return;
             }
 
-            detalhesCalculo += `<strong>Cálculo do INSS:</strong><br>${inssObj.detalhes}<br>`;
-            detalhesCalculo += `<strong>Cálculo do IRRF:</strong><br>${irrfObj.detalhes}<br>`;
+            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
+            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
         } else {
             salarioBruto = valor;
             inssObj = calcularInssProgressivo(salarioBruto);
-            const baseIRRF = salarioBruto - inssObj.total;
-            irrfObj = calcularIrrf(baseIRRF);
+            irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
             adicionalTotal = salarioBruto * aliquotaAdicional;
             salarioLiquido = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
 
-            detalhesCalculo += `<strong>Cálculo do INSS:</strong><br>${inssObj.detalhes}<br>`;
-            detalhesCalculo += `<strong>Cálculo do IRRF:</strong><br>${irrfObj.detalhes}<br>`;
+            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
+            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
         }
 
-        detalhesCalculo += `<strong>Cálculo da Alíquota Adicional:</strong><br>`;
+        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo da Alíquota Adicional:</h6>`;
         if (aliquotaAdicional > 0) {
-            detalhesCalculo += `Valor Bruto x ${(aliquotaAdicional * 100).toFixed(2)}% = R$ ${adicionalTotal.toFixed(2)}<br>`;
+            detalhesCalculo += `Valor Bruto x ${(aliquotaAdicional * 100).toFixed(2)}% = R$ ${adicionalTotal.toFixed(2)}<br></div>`;
         } else {
-            detalhesCalculo += `Nenhuma alíquota adicional aplicada.<br>`;
+            detalhesCalculo += `Nenhuma alíquota adicional aplicada.<br></div>`;
         }
 
-        $('#resultadoSalario').text(`R$ ${(modo === 'modoLiquido' ? salarioBruto : salarioLiquido).toFixed(2)}`);
-        $('#resultadoLabel').text(modo === 'modoLiquido' ? 'Bruto' : 'Líquido');
+        $('#calculoDetalhado').html(detalhesCalculo);
+        $('#resultadoSalario').text(`R$ ${(modo === 'calcularBruto' ? salarioBruto : salarioLiquido).toFixed(2)}`);
+        $('#resultadoLabel').text(modo === 'calcularBruto' ? 'Bruto' : 'Líquido');
         $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
         $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
         $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
-        $('#calculoDetalhado').html(detalhesCalculo);
     }
 
     // Inicialização das configurações
@@ -376,7 +375,7 @@ $(document).ready(function() {
     // Event listeners para cálculo
     $('#salario, input[name="modo"], #aliquotaAdicional').on('input change', function() {
         // Atualizar o rótulo e placeholder do campo de salário
-        if ($('#modoLiquido').is(':checked')) {
+        if ($('#calcularBruto').is(':checked')) {
             $('#labelSalario').text('Valor Líquido Desejado (R$)');
             $('#salario').attr('placeholder', 'Digite o valor líquido desejado');
             $('#helpTextSalario').text('Insira o valor líquido desejado em reais.');
