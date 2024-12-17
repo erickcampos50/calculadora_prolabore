@@ -48,7 +48,6 @@
     border-radius: 8px;
     margin-bottom: 15px;
     padding: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Pequena sombra */
     
 }
 
@@ -95,30 +94,6 @@
         font-size: 0.9rem;
     }
 }
-
-    .cpp-section {
-        background-color: #e2f0d9;
-        padding: 20px;
-        border-radius: 10px; /* Bordas arredondadas */
-        margin-top: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-        border: 1px solid #d4d9e5; /* Borda leve */
-    }
-    .cpp-section h5 {
-        margin-bottom: 15px;
-    }
-
-
-    .total-section {
-    background-color: #f0f4fa; /* Azul claro sutil */
-    padding: 20px;
-    border-radius: 10px; /* Bordas arredondadas */
-    margin-top: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    border: 1px solid #d4d9e5; /* Borda leve */
-    
-    
-    }
     
 
 
@@ -162,6 +137,72 @@
     color: #6b7c93; /* Cinza sutil */
     margin-top: 5px;
 }
+
+
+
+/* Card com destaque em cor */
+.result-card-highlight {
+    background-color: #e8f0fe; /* Azul claro destacado */
+    border: 2px solid #4285f4; /* Borda azul vibrante */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2); /* Sombra azul */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-card-highlight:hover {
+    transform: scale(1.03); /* Leve zoom */
+    box-shadow: 0 6px 12px rgba(66, 133, 244, 0.3); /* Sombra mais intensa */
+}
+
+.result-card-highlight h5 {
+    font-size: 1.3rem;
+    color: #174ea6; /* Azul escuro para título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.result-card-highlight .result-value {
+    font-size: 2rem;
+    color: #174ea6; /* Valor em azul escuro */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+
+/* Card com destaque em borda dourada */
+.result-card-important {
+    background-color: #fffaf0; /* Fundo creme sutil */
+    border: 2px solid #fbbc04; /* Borda dourada */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(251, 188, 4, 0.2); /* Sombra dourada */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-card-important:hover {
+    transform: scale(1.03); /* Leve zoom */
+    box-shadow: 0 6px 12px rgba(251, 188, 4, 0.3); /* Sombra mais intensa */
+}
+
+.result-card-important h5 {
+    font-size: 1.3rem;
+    color: #a36b00; /* Dourado escuro para título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.result-card-important .result-value {
+    font-size: 2rem;
+    color: #a36b00; /* Valor em dourado escuro */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
 
 </style>
 </head>
@@ -207,13 +248,26 @@
                     </p>
                 </div>
                 <div class="result-summary">
-                    <div class="result-card">
+                    <div class="result-card-important">
                         <label class="result-label">Valor <span id="resultadoLabel">Bruto</span> Calculado</label>
                         <div class="result-value" id="resultadoSalario">R$ 0,00</div>
                         <p class="result-help">
                             Este é o valor calculado após os cálculos de INSS, IRRF e alíquota adicional.
                         </p>
                     </div>
+
+
+ <!-- Seção Somatório Total -->
+ <div class="result-card-highlight">
+    <h5 class="result-label">Somatório (Valor calculado + CPP)</h5>
+    <div class="result-value" id="somatorioTotal">R$ 0,00</div>
+    <p class="result-help">
+        Este é o valor resultante da soma do CPP devido pela UFJF com o salário calculado.
+    </p>
+</div>
+
+
+
                     <div class="result-card">
                         <label class="result-label">Desconto INSS</label>
                         <div class="result-value" id="descontoINSS">R$ 0,00</div>
@@ -235,33 +289,29 @@
                             Valor descontado com base na alíquota adicional configurada.
                         </p>
                     </div>
+
+                    <!-- Seção para o CPP devido pela UFJF -->
+                    <div class="result-card">
+                        <h5 class="result-label">Contribuição Previdenciária Patronal/Outros</h5>
+                        <div class="result-value" id="cppValor">R$ 0,00</div>
+                        <p class="result-help">
+                            Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
+                        </p>
+                    </div>
+
+                   
                 </div>
                 
+              
+              
+                <!-- Seção para o CPP devido pela UFJF -->
                 <div class="mb-3">
                     <div id="calculoDetalhado" class="calculation-steps">
                         <h5 class="text-primary">Detalhamento dos cálculos realizados</h5>
                         <!-- Detalhamento será inserido aqui -->
                     </div>
                 </div>
-                <!-- Nova seção para o CPP devido pela UFJF -->
-                <div class="cpp-section">
-                    <h5>Contribuição Previdenciária Patronal/Outros</h5>
-                    <div id="cppValor">R$ 0,00</div>
-                    <p class="help-text mt-1">
-                        Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
-                    </p>
-                </div>
-
-            <!-- Seção Somatório Total -->
-            <div class="total-section">
-                <h5>Somatório (Valor calculado + CPP)</h5>
-                <div id="somatorioTotal">R$ 0,00</div>
-                <p class="help-text mt-1">
-                    Este é o valor resultante da soma do CPP devido pela UFJF com o salário calculado.
-                </p>
-            </div>
-
-
+                
             </div>
             <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
                 <p class="help-text mb-3">
