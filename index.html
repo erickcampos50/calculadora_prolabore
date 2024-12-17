@@ -21,27 +21,148 @@
         cursor: pointer;
         color: red;
     }
+ /* Estilo Geral da Seção de Detalhamento */
+.calculation-steps {
+    background-color: #f9fbff; /* Fundo suave em azul claro */
+    border: 1px solid #d1e3f8; /* Borda sutil azul */
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.calculation-steps h5 {
+    color: #2c4877; /* Azul escuro para título */
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #b4c8e6; /* Linha decorativa */
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+/* Estilo para cada seção de cálculo */
+.calculation-section {
+ 
+   
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Pequena sombra */
+    
+}
+
+.calculation-section h6 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #334b7a; /* Azul escuro */
+    margin-bottom: 8px;
+}
+
+.calculation-section p,
+.calculation-section div {
+    font-size: 0.95rem;
+    color: #4b5d7c; /* Cinza azulado */
+    line-height: 1.5;
+}
+
+
+
+/* Estilo para Valores numéricos */
+.calculation-section strong,
+.calculation-section .value-highlight {
+    font-weight: bold;
+    color: #1e355f; /* Azul forte */
+    font-size: 1.1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
     .calculation-steps {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 5px;
+        padding: 15px;
     }
+
     .calculation-section {
-        margin-bottom: 20px;
+        padding: 10px;
     }
+
     .calculation-section h6 {
-        font-weight: bold;
-        margin-bottom: 10px;
+        font-size: 1rem;
     }
+
+    .calculation-section p,
+    .calculation-section div {
+        font-size: 0.9rem;
+    }
+}
+
     .cpp-section {
         background-color: #e2f0d9;
         padding: 20px;
-        border-radius: 5px;
+        border-radius: 10px; /* Bordas arredondadas */
         margin-top: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        border: 1px solid #d4d9e5; /* Borda leve */
     }
     .cpp-section h5 {
         margin-bottom: 15px;
     }
+
+
+    .total-section {
+    background-color: #f0f4fa; /* Azul claro sutil */
+    padding: 20px;
+    border-radius: 10px; /* Bordas arredondadas */
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border: 1px solid #d4d9e5; /* Borda leve */
+    
+    
+    }
+    
+
+
+
+
+/* Estilo Geral */
+.result-summary {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra em dispositivos menores */
+    gap: 20px; /* Espaço entre as caixas */
+    margin-top: 20px;
+}
+
+.result-card {
+    background-color: #f8f9fc; /* Cor de fundo leve */
+    border: 1px solid #d1d9e6; /* Borda leve azulada */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 15px;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
+    min-width: 250px; /* Largura mínima */
+    text-align: center; /* Centralizar conteúdo */
+}
+
+.result-label {
+    font-size: 1rem;
+    color: #3a4f7a; /* Azul escuro */
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.result-value {
+    font-size: 1.8rem;
+    color: #1e355f; /* Azul forte */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.result-help {
+    font-size: 0.9rem;
+    color: #6b7c93; /* Cinza sutil */
+    margin-top: 5px;
+}
+
 </style>
 </head>
 <body>
@@ -85,34 +206,37 @@
                         Insira o valor líquido desejado em reais.
                     </p>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Valor <span id="resultadoLabel">Bruto</span> Calculado</label>
-                    <div class="fs-4 fw-bold" id="resultadoSalario">R$ 0,00</div>
-                    <p class="help-text mt-1">
-                        Este é o valor calculado após os cálculos de INSS, IRRF e alíquota adicional.
-                    </p>
+                <div class="result-summary">
+                    <div class="result-card">
+                        <label class="result-label">Valor <span id="resultadoLabel">Bruto</span> Calculado</label>
+                        <div class="result-value" id="resultadoSalario">R$ 0,00</div>
+                        <p class="result-help">
+                            Este é o valor calculado após os cálculos de INSS, IRRF e alíquota adicional.
+                        </p>
+                    </div>
+                    <div class="result-card">
+                        <label class="result-label">Desconto INSS</label>
+                        <div class="result-value" id="descontoINSS">R$ 0,00</div>
+                        <p class="result-help">
+                            Valor descontado para o INSS, calculado progressivamente conforme as faixas salariais.
+                        </p>
+                    </div>
+                    <div class="result-card">
+                        <label class="result-label">Desconto IRRF</label>
+                        <div class="result-value" id="descontoIRRF">R$ 0,00</div>
+                        <p class="result-help">
+                            Valor descontado para o Imposto de Renda, calculado progressivamente após a dedução do INSS.
+                        </p>
+                    </div>
+                    <div class="result-card">
+                        <label class="result-label">Desconto Alíquota Adicional</label>
+                        <div class="result-value" id="descontoAdicional">R$ 0,00</div>
+                        <p class="result-help">
+                            Valor descontado com base na alíquota adicional configurada.
+                        </p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Desconto INSS</label>
-                    <div id="descontoINSS">R$ 0,00</div>
-                    <p class="help-text mt-1">
-                        Valor descontado para o INSS, calculado progressivamente conforme as faixas salariais.
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Desconto IRRF</label>
-                    <div id="descontoIRRF">R$ 0,00</div>
-                    <p class="help-text mt-1">
-                        Valor descontado para o Imposto de Renda, calculado progressivamente após a dedução do INSS.
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Desconto Alíquota Adicional</label>
-                    <div id="descontoAdicional">R$ 0,00</div>
-                    <p class="help-text mt-1">
-                        Valor descontado com base na alíquota adicional configurada.
-                    </p>
-                </div>
+                
                 <div class="mb-3">
                     <div id="calculoDetalhado" class="calculation-steps">
                         <h5 class="text-primary">Detalhamento dos cálculos realizados</h5>
@@ -121,12 +245,23 @@
                 </div>
                 <!-- Nova seção para o CPP devido pela UFJF -->
                 <div class="cpp-section">
-                    <h5>CPP/Outros devido pela UFJF</h5>
+                    <h5>Contribuição Previdenciária Patronal/Outros</h5>
                     <div id="cppValor">R$ 0,00</div>
                     <p class="help-text mt-1">
                         Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
                     </p>
                 </div>
+
+            <!-- Seção Somatório Total -->
+            <div class="total-section">
+                <h5>Somatório (Valor calculado + CPP)</h5>
+                <div id="somatorioTotal">R$ 0,00</div>
+                <p class="help-text mt-1">
+                    Este é o valor resultante da soma do CPP devido pela UFJF com o salário calculado.
+                </p>
+            </div>
+
+
             </div>
             <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
                 <p class="help-text mb-3">
@@ -484,61 +619,75 @@ $(document).ready(function() {
         });
     }
 
-    // Função para calcular o salário
     function calcularSalario() {
-        const modo = $('input[name="modo"]:checked').attr('id');
-        const valor = parseFloat($('#salario').val()) || 0;
-        const aliquotaAdicionalInput = $('#aliquotaAdicional').val();
-        const aliquotaAdicional = aliquotaAdicionalInput ? parseFloat(aliquotaAdicionalInput) / 100 : 0;
+    const modo = $('input[name="modo"]:checked').attr('id');
+    const valor = parseFloat($('#salario').val()) || 0;
+    const aliquotaAdicionalInput = $('#aliquotaAdicional').val();
+    const aliquotaAdicional = aliquotaAdicionalInput ? parseFloat(aliquotaAdicionalInput) / 100 : 0;
 
-        // Salvar valores no localStorage
-        localStorage.setItem('salario', $('#salario').val());
-        localStorage.setItem('modo', modo);
-        localStorage.setItem('aliquotaAdicional', aliquotaAdicionalInput);
-        localStorage.setItem('cppAliquota', $('#cppAliquota').val());
+    // Salvar valores no localStorage
+    localStorage.setItem('salario', $('#salario').val());
+    localStorage.setItem('modo', modo);
+    localStorage.setItem('aliquotaAdicional', aliquotaAdicionalInput);
+    localStorage.setItem('cppAliquota', $('#cppAliquota').val());
 
-        let salarioBruto, salarioLiquido, inssObj, irrfObj, adicionalTotal;
-        let detalhesCalculo = '';
+    let salarioBruto, salarioLiquido, inssObj, irrfObj, adicionalTotal;
+    let detalhesCalculo = '';
 
-        if (modo === 'calcularBruto') {
-            salarioLiquido = valor;
-            salarioBruto = calcularBrutoAPartirDeLiquido(salarioLiquido, true);
-            inssObj = calcularInssProgressivo(salarioBruto);
-            irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-            adicionalTotal = salarioBruto * aliquotaAdicional;
+    if (modo === 'calcularBruto') {
+        salarioLiquido = valor;
+        salarioBruto = calcularBrutoAPartirDeLiquido(salarioLiquido, true);
+        inssObj = calcularInssProgressivo(salarioBruto);
+        irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
+        adicionalTotal = salarioBruto * aliquotaAdicional;
 
-            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
-            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
-        } else {
-            salarioBruto = valor;
-            inssObj = calcularInssProgressivo(salarioBruto);
-            irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-            adicionalTotal = salarioBruto * aliquotaAdicional;
-            salarioLiquido = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
+        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
+        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
+    } else {
+        salarioBruto = valor;
+        inssObj = calcularInssProgressivo(salarioBruto);
+        irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
+        adicionalTotal = salarioBruto * aliquotaAdicional;
+        salarioLiquido = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
 
-            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
-            detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
-        }
-
-        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo da Alíquota Adicional:</h6>`;
-        if (aliquotaAdicional > 0) {
-            detalhesCalculo += `Valor Bruto x ${(aliquotaAdicional * 100).toFixed(2)}% = R$ ${adicionalTotal.toFixed(2)}<br></div>`;
-        } else {
-            detalhesCalculo += `Nenhuma alíquota adicional aplicada.<br></div>`;
-        }
-
-        $('#calculoDetalhado').html(detalhesCalculo);
-        $('#resultadoSalario').text(`R$ ${(modo === 'calcularBruto' ? salarioBruto : salarioLiquido).toFixed(2)}`);
-        $('#resultadoLabel').text(modo === 'calcularBruto' ? 'Bruto' : 'Líquido');
-        $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
-        $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
-        $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
-
-        // Cálculo do CPP devido pela UFJF
-        const cppAliquota = parseFloat($('#cppAliquota').val()) / 100 || 0.2; // Valor padrão de 20%
-        const cppValor = salarioBruto * cppAliquota;
-        $('#cppValor').text(`R$ ${cppValor.toFixed(2)}`);
+        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
+        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
     }
+
+    detalhesCalculo += `<div class="calculation-section"><h6>Cálculo da Alíquota Adicional:</h6>`;
+    if (aliquotaAdicional > 0) {
+        detalhesCalculo += `Valor Bruto x ${(aliquotaAdicional * 100).toFixed(2)}% = R$ ${adicionalTotal.toFixed(2)}<br></div>`;
+    } else {
+        detalhesCalculo += `Nenhuma alíquota adicional aplicada.<br></div>`;
+    }
+
+    $('#calculoDetalhado').html(detalhesCalculo);
+    $('#resultadoSalario').text(`R$ ${(modo === 'calcularBruto' ? salarioBruto : salarioLiquido).toFixed(2)}`);
+    $('#resultadoLabel').text(modo === 'calcularBruto' ? 'Bruto' : 'Líquido');
+    $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
+    $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
+    $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
+
+    // Cálculo do CPP devido pela UFJF
+    const cppAliquota = parseFloat($('#cppAliquota').val()) / 100 || 0.2; // Valor padrão de 20%
+    const cppValor = salarioBruto * cppAliquota;
+    $('#cppValor').text(`R$ ${cppValor.toFixed(2)}`);
+
+    // Cálculo do Somatório Total
+    const somatorioTotal = cppValor + (modo === 'calcularBruto' ? salarioBruto : salarioLiquido);
+    $('#somatorioTotal').text(`R$ ${somatorioTotal.toFixed(2)}`);
+}
+
+
+    // Função para calcular e exibir o somatório total
+    function calcularSomatorio() {
+        const cppValor = parseFloat(document.getElementById('cppValor').innerText.replace('R$', '').replace(',', '.')) || 0;
+        const resultadoSalario = parseFloat(document.getElementById('resultadoSalario').innerText.replace('R$', '').replace(',', '.')) || 0;
+        const somatorio = cppValor + resultadoSalario;
+        document.getElementById('somatorioTotal').innerText = somatorio;
+    }
+
+
 
     // Inicialização das configurações
     atualizarConfigINSS();
