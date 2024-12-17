@@ -270,7 +270,7 @@ $(document).ready(function() {
                         <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Limite Inferior (R$)</label>
-                                <input type="number" class="form-control inss-lower" data-index="${index}" value="${faixa.lower.toFixed(2)}" step="0.01">
+                                <input type="number" class="form-control inss-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="0.01">
                             </div>
                             <div class="col">
                                 <label class="form-label">Limite Superior (R$)</label>
@@ -303,7 +303,7 @@ $(document).ready(function() {
                         <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Limite Inferior (R$)</label>
-                                <input type="number" class="form-control irrf-lower" data-index="${index}" value="${faixa.lower.toFixed(2)}" step="0.01">
+                                <input type="number" class="form-control irrf-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="0.01">
                             </div>
                             <div class="col">
                                 <label class="form-label">Limite Superior (R$)</label>
