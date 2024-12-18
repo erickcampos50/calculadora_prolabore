@@ -150,6 +150,7 @@
     box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2); /* Sombra azul */
     text-align: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
 }
 
 .result-card-highlight:hover {
@@ -182,6 +183,7 @@
     box-shadow: 0 4px 8px rgba(251, 188, 4, 0.2); /* Sombra dourada */
     text-align: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
 }
 
 .result-card-important:hover {
@@ -252,7 +254,7 @@
                         <label class="result-label">Valor <span id="resultadoLabel">Bruto</span> Calculado</label>
                         <div class="result-value" id="resultadoSalario">R$ 0,00</div>
                         <p class="result-help">
-                            Este é o valor calculado após os cálculos de INSS, IRRF e alíquota adicional.
+                            Este é o valor calculado considerando os valores de INSS, IRRF e alíquota adicional.
                         </p>
                     </div>
 
@@ -262,7 +264,7 @@
     <h5 class="result-label">Somatório (Valor calculado + CPP)</h5>
     <div class="result-value" id="somatorioTotal">R$ 0,00</div>
     <p class="result-help">
-        Este é o valor resultante da soma do CPP devido pela UFJF com o salário calculado.
+        Este é o valor resultante da soma do CPP devido pela UFJF com o valor líquido/bruto calculado.
     </p>
 </div>
 
@@ -424,7 +426,7 @@ $(document).ready(function() {
     }
 
     // Carregar configurações ao iniciar
-    carregarConfiguracoes();
+    // carregarConfiguracoes(); //Tive que desativar porque estava gerando um erro na hora de carregar as configurações se o usuário editasse alguma coisa
 
     // Carregar valores do formulário do localStorage
     function carregarFormulario() {
@@ -488,21 +490,21 @@ $(document).ready(function() {
                         <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Limite Inferior (R$)</label>
-                                <input type="number" class="form-control irrf-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="0.01">
+                                <input type="number" class="form-control irrf-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="1">
                             </div>
                             <div class="col">
                                 <label class="form-label">Limite Superior (R$)</label>
-                                <input type="number" class="form-control irrf-upper" data-index="${index}" value="${faixa.upper === Infinity ? '' : faixa.upper.toFixed(2)}" step="0.01">
+                                <input type="number" class="form-control irrf-upper" data-index="${index}" value="${faixa.upper === Infinity ? '' : faixa.upper.toFixed(2)}" step="1">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
                                 <label class="form-label">Alíquota (decimal)</label>
-                                <input type="number" class="form-control irrf-aliquota" data-index="${index}" value="${faixa.aliquota}" step="0.001">
+                                <input type="number" class="form-control irrf-aliquota" data-index="${index}" value="${faixa.aliquota}" step="1">
                             </div>
                             <div class="col">
                                 <label class="form-label">Dedução (R$)</label>
-                                <input type="number" class="form-control irrf-deducao" data-index="${index}" value="${faixa.deducao.toFixed(2)}" step="0.01">
+                                <input type="number" class="form-control irrf-deducao" data-index="${index}" value="${faixa.deducao.toFixed(2)}" step="1">
                             </div>
                         </div>
                     </div>
