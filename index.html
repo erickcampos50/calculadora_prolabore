@@ -244,9 +244,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="salario" class="form-label" id="labelSalario">Valor Líquido Desejado (R$)</label>
-                    <input type="number" class="form-control" id="salario" placeholder="Digite o valor líquido desejado">
+                    <input type="number" class="form-control" id="salario" placeholder="Digite o valor líquido que você deseja alcançar">
                     <p class="help-text mt-1" id="helpTextSalario">
-                        Insira o valor líquido desejado em reais.
+                        Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis
                     </p>
                 </div>
                 <div class="result-summary">
@@ -747,20 +747,21 @@ $(document).ready(function() {
 
     // Event listeners para cálculo
     $('#salario, input[name="modo"], #aliquotaAdicional, #cppAliquota').on('input change', function() {
-        // Atualizar o rótulo e placeholder do campo de salário
-        if ($('#calcularBruto').is(':checked')) {
-            $('#labelSalario').text('Valor Líquido Desejado (R$)');
-            $('#salario').attr('placeholder', 'Digite o valor líquido desejado');
-            $('#helpTextSalario').text('Insira o valor líquido desejado em reais.');
-            $('#resultadoLabel').text('Bruto');
-        } else {
-            $('#labelSalario').text('Valor Bruto Recebido (R$)');
-            $('#salario').attr('placeholder', 'Digite o valor bruto recebido');
-            $('#helpTextSalario').text('Insira o valor bruto recebido em reais.');
-            $('#resultadoLabel').text('Líquido');
-        }
-        calcularSalario();
-    });
+    // Atualizar o rótulo e placeholder do campo de salário
+    if ($('#calcularBruto').is(':checked')) {
+        $('#labelSalario').text('Valor Líquido Desejado (R$)');
+        $('#salario').attr('placeholder', 'Digite o valor líquido que você deseja alcançar');
+        $('#helpTextSalario').text('Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis.');
+        $('#resultadoLabel').text('Valor Bruto Necessário (R$)');
+    } else {
+        $('#labelSalario').text('Valor Bruto Disponibilizado (R$)');
+        $('#salario').attr('placeholder', 'Digite o valor bruto que foi disponibilizado para realizar o pagamento');
+        $('#helpTextSalario').text('Informe o valor bruto disponibilizado. O sistema calculará o valor líquido final após descontos de impostos.');
+        $('#resultadoLabel').text('Valor Líquido Recebido (R$)');
+    }
+    calcularSalario();
+});
+
 
     // Event listener para mostrar/ocultar ajuda
     $('#mostrarAjuda').change(function() {
