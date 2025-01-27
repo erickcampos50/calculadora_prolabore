@@ -336,16 +336,18 @@
                         Insira a alíquota referente ao CPP e outros encargos que a UFJF deverá recolher.
                     </p>
                 </div>
-                <h5 class="mb-3">Configurações INSS</h5>
+                <!-- Funcionalidades desativadas porque estavam gerando erros sério quando utilizadas  -->
+                
+                <!-- <h5 class="mb-3">Configurações INSS</h5> 
                 <div id="configINSS">
-                    <!-- Faixas INSS serão adicionadas dinamicamente aqui -->
+                    
                 </div>
                 <button class="btn btn-success mb-3" id="adicionarFaixaINSS">Adicionar Faixa INSS</button>
                 <h5 class="mb-3">Configurações IRRF</h5>
                 <div id="configIRRF">
-                    <!-- Faixas IRRF serão adicionadas dinamicamente aqui -->
+                    
                 </div>
-                <button class="btn btn-success mb-3" id="adicionarFaixaIRRF">Adicionar Faixa IRRF</button>
+                <button class="btn btn-success mb-3" id="adicionarFaixaIRRF">Adicionar Faixa IRRF</button> -->
             </div>
             <!-- Conteúdo da nova aba Gráfico -->
             <div class="tab-pane fade" id="grafico" role="tabpanel" aria-labelledby="grafico-tab">
@@ -372,10 +374,10 @@
             </p>
             <ul>
                 <li>
-                    <a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2024" target="_blank">Tabela de IRRF 2024 (Receita Federal)</a>
+                    <a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2024" target="_blank">Tabela de IRRF 2024 (dez/2024)</a>
                 </li>
                 <li>
-                    <a href="https://www.gov.br/inss/pt-br/noticias/confira-as-aliquotas-de-contribuicao-ao-inss-com-o-aumento-do-salario-minimo" target="_blank">Tabela de Alíquotas INSS (INSS)</a>
+                    <a href="https://www.gov.br/inss/pt-br/noticias/confira-como-ficaram-as-aliquotas-de-contribuicao-ao-inss" target="_blank">Tabela de Alíquotas INSS (jan/2025)</a>
                 </li>
             </ul>
             <p class="card-text">
@@ -397,10 +399,10 @@ $(document).ready(function() {
     // Configuração inicial
     let config = {
         inss: [
-            { lower: 0.00, upper: 1412.00, aliquota: 0.075 },
-            { lower: 1412.01, upper: 2666.68, aliquota: 0.09 },
-            { lower: 2666.69, upper: 4000.03, aliquota: 0.12 },
-            { lower: 4000.04, upper: 7786.02, aliquota: 0.14 }
+            { lower: 0.00, upper: 1518.00, aliquota: 0.075 },
+            { lower: 1518.01, upper: 2793.88, aliquota: 0.09 },
+            { lower: 2793.89, upper: 4190.83, aliquota: 0.12 },
+            { lower: 4190.84, upper: 8157.41, aliquota: 0.14 }
         ],
         irrf: [
             { lower: 0.00, upper: 2259.20, aliquota: 0.0, deducao: 0.00 },
