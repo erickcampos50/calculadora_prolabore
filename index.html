@@ -238,12 +238,12 @@
                 </p>
                 <div class="btn-group mb-3" role="group" aria-label="Modo de cálculo">
                     <input type="radio" class="btn-check" name="modo" id="calcularBruto" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary" for="calcularBruto">Calcular Valor Bruto/Requisição</label>
+                    <label class="btn btn-outline-primary" for="calcularBruto">Calcular valor da Requisição (valor bruto)</label>
                     <input type="radio" class="btn-check" name="modo" id="calcularLiquido" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="calcularLiquido">Calcular Valor Líquido/Recebido pelo prestador</label>
+                    <label class="btn btn-outline-primary" for="calcularLiquido">Calcular que será recebido pelo prestador</label>
                 </div>
                 <div class="mb-3">
-                    <label for="salario" class="form-label" id="labelSalario">Valor Líquido Desejado (R$)</label>
+                    <label for="salario" class="form-label" id="labelSalario">Valor líquido acordado com o prestador (R$)</label>
                     <input type="number" class="form-control" id="salario" placeholder="Digite o valor líquido que você deseja alcançar">
                     <p class="help-text mt-1" id="helpTextSalario">
                         Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis
@@ -251,7 +251,7 @@
                 </div>
                 <div class="result-summary">
                     <div class="result-card-important">
-                        <label class="result-label">Valor <span id="resultadoLabel">Bruto</span> Calculado</label>
+                        <label class="result-label">Valor Calculado: <span id="resultadoLabel">Bruto</span></label>
                         <div class="result-value" id="resultadoSalario">R$ 0,00</div>
                         <p class="result-help">
                             Este é o valor calculado considerando os valores de INSS, IRRF e alíquota adicional.
@@ -717,7 +717,7 @@ $(document).ready(function() {
 
     $('#calculoDetalhado').html(detalhesCalculo);
     $('#resultadoSalario').text(`R$ ${(modo === 'calcularBruto' ? salarioBruto : salarioLiquido).toFixed(2)}`);
-    $('#resultadoLabel').text(modo === 'calcularBruto' ? 'Bruto' : 'Líquido');
+    $('#resultadoLabel').text(modo === 'calcularBruto' ? 'valor da requisição' : 'valor recebido pelo prestador');
     $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
     $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
     $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
@@ -751,12 +751,12 @@ $(document).ready(function() {
     $('#salario, input[name="modo"], #aliquotaAdicional, #cppAliquota').on('input change', function() {
     // Atualizar o rótulo e placeholder do campo de salário
     if ($('#calcularBruto').is(':checked')) {
-        $('#labelSalario').text('Valor Líquido Desejado (R$)');
+        $('#labelSalario').text('Valor líquido acordado com o prestador (R$)');
         $('#salario').attr('placeholder', 'Digite o valor líquido que você deseja alcançar');
         $('#helpTextSalario').text('Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis.');
         $('#resultadoLabel').text('Valor Bruto Necessário (R$)');
     } else {
-        $('#labelSalario').text('Valor Bruto Disponibilizado (R$)');
+        $('#labelSalario').text('Orçamento disponibilizado para a requisição (valor bruto) (R$)');
         $('#salario').attr('placeholder', 'Digite o valor bruto que foi disponibilizado para realizar o pagamento');
         $('#helpTextSalario').text('Informe o valor bruto disponibilizado. O sistema calculará o valor líquido final após descontos de impostos.');
         $('#resultadoLabel').text('Valor Líquido Recebido (R$)');
