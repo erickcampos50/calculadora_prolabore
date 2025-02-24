@@ -1,0 +1,136 @@
+/* cards.css - Estilos para os cards de resultado */
+
+/* Estilo Geral */
+.result-summary {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra em dispositivos menores */
+    gap: 20px; /* Espaço entre as caixas */
+    margin-top: 20px;
+}
+
+.result-card {
+    background-color: #f8f9fc; /* Cor de fundo leve */
+    border: 1px solid #d1d9e6; /* Borda leve azulada */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 15px;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
+    min-width: 250px; /* Largura mínima */
+    text-align: center; /* Centralizar conteúdo */
+}
+
+.result-label {
+    font-size: 1rem;
+    color: #3a4f7a; /* Azul escuro */
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.result-value {
+    font-size: 1.8rem;
+    color: #1e355f; /* Azul forte */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.result-help {
+    font-size: 0.9rem;
+    color: #6b7c93; /* Cinza sutil */
+    margin-top: 5px;
+}
+
+/* Card com destaque em cor */
+.result-card-highlight {
+    background-color: #e8f0fe; /* Azul claro destacado */
+    border: 2px solid #4285f4; /* Borda azul vibrante */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2); /* Sombra azul */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
+}
+
+.result-card-highlight:hover {
+    transform: scale(1.03); /* Leve zoom */
+    box-shadow: 0 6px 12px rgba(66, 133, 244, 0.3); /* Sombra mais intensa */
+}
+
+.result-card-highlight h5 {
+    font-size: 1.3rem;
+    color: #174ea6; /* Azul escuro para título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.result-card-highlight .result-value {
+    font-size: 2rem;
+    color: #174ea6; /* Valor em azul escuro */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Card com destaque em borda dourada */
+.result-card-important {
+    background-color: #fffaf0; /* Fundo creme sutil */
+    border: 2px solid #fbbc04; /* Borda dourada */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(251, 188, 4, 0.2); /* Sombra dourada */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
+}
+
+.result-card-important:hover {
+    transform: scale(1.03); /* Leve zoom */
+    box-shadow: 0 6px 12px rgba(251, 188, 4, 0.3); /* Sombra mais intensa */
+}
+
+.result-card-important h5 {
+    font-size: 1.3rem;
+    color: #a36b00; /* Dourado escuro para título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.result-card-important .result-value {
+    font-size: 2rem;
+    color: #a36b00; /* Valor em dourado escuro */
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Card para Valor da requisição do SIGA */
+.dotacao-card {
+    background-color: #e0f7fa; /* Fundo turquesa claro */
+    border: 2px solid #00acc1; /* Borda turquesa */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 172, 193, 0.2); /* Sombra turquesa */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
+}
+
+.dotacao-card:hover {
+    transform: scale(1.03); /* Leve zoom */
+    box-shadow: 0 6px 12px rgba(0, 172, 193, 0.3); /* Sombra mais intensa */
+}
+
+.dotacao-card h5 {
+    font-size: 1.3rem;
+    color: #00838f; /* Turquesa escuro para título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.dotacao-card .result-value {
+    font-size: 2rem;
+    color: #00838f; /* Valor em turquesa escuro */
+    font-weight: bold;
+    margin: 10px 0;
+}

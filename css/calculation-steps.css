@@ -1,0 +1,50 @@
+/* calculation-steps.css - Estilos para o detalhamento dos cálculos */
+
+/* Estilo Geral da Seção de Detalhamento */
+.calculation-steps {
+    background-color: #f9fbff; /* Fundo suave em azul claro */
+    border: 1px solid #d1e3f8; /* Borda sutil azul */
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.calculation-steps h5 {
+    color: #2c4877; /* Azul escuro para título */
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #b4c8e6; /* Linha decorativa */
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+/* Estilo para cada seção de cálculo */
+.calculation-section {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.calculation-section h6 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #334b7a; /* Azul escuro */
+    margin-bottom: 8px;
+}
+
+.calculation-section p,
+.calculation-section div {
+    font-size: 0.95rem;
+    color: #4b5d7c; /* Cinza azulado */
+    line-height: 1.5;
+}
+
+/* Estilo para Valores numéricos */
+.calculation-section strong,
+.calculation-section .value-highlight {
+    font-weight: bold;
+    color: #1e355f; /* Azul forte */
+    font-size: 1.1rem;
+}

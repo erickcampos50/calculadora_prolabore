@@ -1,361 +1,165 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora Avançada de Valores</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Inclusão da biblioteca Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-    .help-text {
-        display: none;
-        color: #6c757d;
-        font-size: 0.875rem;
-    }
-    .faixa-header {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .remove-faixa {
-        cursor: pointer;
-        color: red;
-    }
- /* Estilo Geral da Seção de Detalhamento */
-.calculation-steps {
-    background-color: #f9fbff; /* Fundo suave em azul claro */
-    border: 1px solid #d1e3f8; /* Borda sutil azul */
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-}
-
-.calculation-steps h5 {
-    color: #2c4877; /* Azul escuro para título */
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #b4c8e6; /* Linha decorativa */
-    padding-bottom: 5px;
-    text-align: center;
-}
-
-/* Estilo para cada seção de cálculo */
-.calculation-section {
- 
-   
-    border-radius: 8px;
-    margin-bottom: 15px;
-    padding: 15px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Avançada de Valores</title>
     
-}
-
-.calculation-section h6 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #334b7a; /* Azul escuro */
-    margin-bottom: 8px;
-}
-
-.calculation-section p,
-.calculation-section div {
-    font-size: 0.95rem;
-    color: #4b5d7c; /* Cinza azulado */
-    line-height: 1.5;
-}
-
-
-
-/* Estilo para Valores numéricos */
-.calculation-section strong,
-.calculation-section .value-highlight {
-    font-weight: bold;
-    color: #1e355f; /* Azul forte */
-    font-size: 1.1rem;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .calculation-steps {
-        padding: 15px;
-    }
-
-    .calculation-section {
-        padding: 10px;
-    }
-
-    .calculation-section h6 {
-        font-size: 1rem;
-    }
-
-    .calculation-section p,
-    .calculation-section div {
-        font-size: 0.9rem;
-    }
-}
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/calculator.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/calculation-steps.css">
     
-
-
-
-
-/* Estilo Geral */
-.result-summary {
-    display: flex;
-    flex-wrap: wrap; /* Permite quebra em dispositivos menores */
-    gap: 20px; /* Espaço entre as caixas */
-    margin-top: 20px;
-}
-
-.result-card {
-    background-color: #f8f9fc; /* Cor de fundo leve */
-    border: 1px solid #d1d9e6; /* Borda leve azulada */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    padding: 15px;
-    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
-    min-width: 250px; /* Largura mínima */
-    text-align: center; /* Centralizar conteúdo */
-}
-
-.result-label {
-    font-size: 1rem;
-    color: #3a4f7a; /* Azul escuro */
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.result-value {
-    font-size: 1.8rem;
-    color: #1e355f; /* Azul forte */
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-.result-help {
-    font-size: 0.9rem;
-    color: #6b7c93; /* Cinza sutil */
-    margin-top: 5px;
-}
-
-
-
-/* Card com destaque em cor */
-.result-card-highlight {
-    background-color: #e8f0fe; /* Azul claro destacado */
-    border: 2px solid #4285f4; /* Borda azul vibrante */
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2); /* Sombra azul */
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
-}
-
-.result-card-highlight:hover {
-    transform: scale(1.03); /* Leve zoom */
-    box-shadow: 0 6px 12px rgba(66, 133, 244, 0.3); /* Sombra mais intensa */
-}
-
-.result-card-highlight h5 {
-    font-size: 1.3rem;
-    color: #174ea6; /* Azul escuro para título */
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.result-card-highlight .result-value {
-    font-size: 2rem;
-    color: #174ea6; /* Valor em azul escuro */
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-
-/* Card com destaque em borda dourada */
-.result-card-important {
-    background-color: #fffaf0; /* Fundo creme sutil */
-    border: 2px solid #fbbc04; /* Borda dourada */
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(251, 188, 4, 0.2); /* Sombra dourada */
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    flex: 1 1 calc(50% - 20px); /* 2 colunas com espaçamento */
-}
-
-.result-card-important:hover {
-    transform: scale(1.03); /* Leve zoom */
-    box-shadow: 0 6px 12px rgba(251, 188, 4, 0.3); /* Sombra mais intensa */
-}
-
-.result-card-important h5 {
-    font-size: 1.3rem;
-    color: #a36b00; /* Dourado escuro para título */
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.result-card-important .result-value {
-    font-size: 2rem;
-    color: #a36b00; /* Valor em dourado escuro */
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-
-</style>
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="container mt-5">
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Calculadora de pagamento de pessoas físicas</h5>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="mostrarAjuda">
-            <label class="form-check-label" for="mostrarAjuda">Mostrar Ajuda</label>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Calculadora de pagamento de pessoas físicas</h5>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="mostrarAjuda">
+                <label class="form-check-label" for="mostrarAjuda">Mostrar Ajuda</label>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="calculo-tab" data-bs-toggle="tab" data-bs-target="#calculo" type="button" role="tab" aria-controls="calculo" aria-selected="true">Calculadora</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab" aria-controls="config" aria-selected="false">Configurações</button>
-            </li>
-            <!-- Nova aba para o gráfico -->
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="grafico-tab" data-bs-toggle="tab" data-bs-target="#grafico" type="button" role="tab" aria-controls="grafico" aria-selected="false">Gráfico</button>
-            </li>
-        </ul>
-        <div class="tab-content mt-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="calculo" role="tabpanel" aria-labelledby="calculo-tab">
-                <p class="help-text mb-3">
-                    Escolha a funcionalidade desejada: calcular o valor bruto a partir de um valor líquido desejado ou calcular o valor líquido que será pago a partir de um valor bruto informado.
-                </p>
-                <div class="btn-group mb-3" role="group" aria-label="Modo de cálculo">
-                    <input type="radio" class="btn-check" name="modo" id="calcularBruto" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary" for="calcularBruto">Calcular valor da Requisição (valor bruto)</label>
-                    <input type="radio" class="btn-check" name="modo" id="calcularLiquido" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="calcularLiquido">Calcular que será recebido pelo prestador</label>
-                </div>
-                <div class="mb-3">
-                    <label for="salario" class="form-label" id="labelSalario">Valor líquido acordado com o prestador (R$)</label>
-                    <input type="number" class="form-control" id="salario" placeholder="Digite o valor líquido que você deseja alcançar">
-                    <p class="help-text mt-1" id="helpTextSalario">
-                        Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="calculo-tab" data-bs-toggle="tab" data-bs-target="#calculo" type="button" role="tab" aria-controls="calculo" aria-selected="true">Calculadora</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab" aria-controls="config" aria-selected="false">Configurações</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="grafico-tab" data-bs-toggle="tab" data-bs-target="#grafico" type="button" role="tab" aria-controls="grafico" aria-selected="false">Gráfico</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="myTabContent">
+                <!-- Aba Calculadora -->
+                <div class="tab-pane fade show active" id="calculo" role="tabpanel" aria-labelledby="calculo-tab">
+                    <p class="help-text mb-3">
+                        Escolha a funcionalidade desejada: calcular o valor bruto a partir de um valor líquido desejado ou calcular o valor líquido que será pago a partir de um valor bruto informado.
                     </p>
-                </div>
-                <div class="result-summary">
-                    <div class="result-card-important">
-                        <label class="result-label">Valor Calculado: <span id="resultadoLabel">Bruto</span></label>
-                        <div class="result-value" id="resultadoSalario">R$ 0,00</div>
-                        <p class="result-help">
-                            Este é o valor calculado considerando os valores de INSS, IRRF e alíquota adicional.
+                    <div class="btn-group mb-3" role="group" aria-label="Modo de cálculo">
+                        <input type="radio" class="btn-check" name="modo" id="calcularBruto" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="calcularBruto">Calcular valor da Requisição (valor bruto)</label>
+                        <input type="radio" class="btn-check" name="modo" id="calcularLiquido" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="calcularLiquido">Calcular que será recebido pelo prestador</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="salario" class="form-label" id="labelSalario">Valor líquido acordado com o prestador (R$)</label>
+                        <input type="number" class="form-control" id="salario" placeholder="Digite o valor líquido que você deseja alcançar">
+                        <p class="help-text mt-1" id="helpTextSalario">
+                            Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis
                         </p>
                     </div>
+                    <div class="result-summary">
+                        <div class="result-card-important">
+                            <label class="result-label">Valor Calculado: <span id="resultadoLabel">Bruto</span></label>
+                            <div class="result-value" id="resultadoSalario">R$ 0,00</div>
+                            <p class="result-help">
+                                Este é o valor calculado considerando os valores de INSS, IRRF e alíquota adicional.
+                            </p>
+                        </div>
 
+                        <div class="result-card-highlight">
+                            <h5 class="result-label">Valor da dotação (Valor calculado + CPP)</h5>
+                            <div class="result-value" id="somatorioTotal">R$ 0,00</div>
+                            <p class="result-help">
+                                Este é o valor resultante da soma do CPP devido pela UFJF com o valor líquido/bruto calculado.
+                            </p>
+                        </div>
 
- <!-- Seção Somatório Total -->
- <div class="result-card-highlight">
-    <h5 class="result-label">Somatório (Valor calculado + CPP)</h5>
-    <div class="result-value" id="somatorioTotal">R$ 0,00</div>
-    <p class="result-help">
-        Este é o valor resultante da soma do CPP devido pela UFJF com o valor líquido/bruto calculado.
-    </p>
-</div>
+                        <!-- Novo card para o Valor da requisição do SIGA -->
+                        <div class="dotacao-card">
+                            <h5 class="result-label">Valor da requisição do SIGA</h5>
+                            <div class="result-value" id="valorDotacao">R$ 0,00</div>
+                            <p class="result-help">
+                                Este é o Valor da dotação menos o valor da Contribuição Previdenciária Patronal.
+                            </p>
+                        </div>
 
+                        <div class="result-card">
+                            <label class="result-label">Desconto INSS</label>
+                            <div class="result-value" id="descontoINSS">R$ 0,00</div>
+                            <p class="result-help">
+                                Valor descontado para o INSS, calculado progressivamente conforme as faixas salariais.
+                            </p>
+                        </div>
+                        <div class="result-card">
+                            <label class="result-label">Desconto IRRF</label>
+                            <div class="result-value" id="descontoIRRF">R$ 0,00</div>
+                            <p class="result-help">
+                                Valor descontado para o Imposto de Renda, calculado progressivamente após a dedução do INSS.
+                            </p>
+                        </div>
+                        <div class="result-card">
+                            <label class="result-label">Desconto Alíquota Adicional</label>
+                            <div class="result-value" id="descontoAdicional">R$ 0,00</div>
+                            <p class="result-help">
+                                Valor descontado com base na alíquota adicional configurada.
+                            </p>
+                        </div>
 
-
-                    <div class="result-card">
-                        <label class="result-label">Desconto INSS</label>
-                        <div class="result-value" id="descontoINSS">R$ 0,00</div>
-                        <p class="result-help">
-                            Valor descontado para o INSS, calculado progressivamente conforme as faixas salariais.
-                        </p>
+                        <div class="result-card">
+                            <h5 class="result-label">Contribuição Previdenciária Patronal/Outros</h5>
+                            <div class="result-value" id="cppValor">R$ 0,00</div>
+                            <p class="result-help">
+                                Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
+                            </p>
+                        </div>
                     </div>
-                    <div class="result-card">
-                        <label class="result-label">Desconto IRRF</label>
-                        <div class="result-value" id="descontoIRRF">R$ 0,00</div>
-                        <p class="result-help">
-                            Valor descontado para o Imposto de Renda, calculado progressivamente após a dedução do INSS.
-                        </p>
-                    </div>
-                    <div class="result-card">
-                        <label class="result-label">Desconto Alíquota Adicional</label>
-                        <div class="result-value" id="descontoAdicional">R$ 0,00</div>
-                        <p class="result-help">
-                            Valor descontado com base na alíquota adicional configurada.
-                        </p>
-                    </div>
-
-                    <!-- Seção para o CPP devido pela UFJF -->
-                    <div class="result-card">
-                        <h5 class="result-label">Contribuição Previdenciária Patronal/Outros</h5>
-                        <div class="result-value" id="cppValor">R$ 0,00</div>
-                        <p class="result-help">
-                            Este é o valor referente ao CPP que a UFJF deverá recolher, calculado com base no valor bruto.
-                        </p>
-                    </div>
-
-                   
-                </div>
-                
-              
-              
-                <!-- Seção para o CPP devido pela UFJF -->
-                <div class="mb-3">
-                    <div id="calculoDetalhado" class="calculation-steps">
-                        <h5 class="text-primary">Detalhamento dos cálculos realizados</h5>
-                        <!-- Detalhamento será inserido aqui -->
-                    </div>
-                </div>
-                
-            </div>
-            <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
-                <p class="help-text mb-3">
-                    Aqui você pode ajustar as faixas e alíquotas do INSS e IRRF. Os valores de limite são em reais (R$), as alíquotas são em decimal (ex: 0.075 para 7,5%) e as deduções em reais.
-                </p>
-                <h5 class="mb-3">Alíquota Adicional</h5>
-                <div class="mb-3">
-                    <label class="form-label">Alíquota Adicional (%)</label>
-                    <input type="number" class="form-control" id="aliquotaAdicional" placeholder="Digite a alíquota adicional em %">
-                    <p class="help-text mt-1">
-                        Insira a alíquota adicional que pode ser ISSQN ou outra. Deixe em branco se não houver.
-                    </p>
-                </div>
-                <!-- Novo campo para CPP e outros -->
-                <h5 class="mb-3">CPP e outros</h5>
-                <div class="mb-3">
-                    <label class="form-label">CPP e outros (%)</label>
-                    <input type="number" class="form-control" id="cppAliquota" placeholder="Digite a alíquota do CPP e outros em % (padrão 20%)" value="20">
-                    <p class="help-text mt-1">
-                        Insira a alíquota referente ao CPP e outros encargos que a UFJF deverá recolher.
-                    </p>
-                </div>
-                <!-- Funcionalidades desativadas porque estavam gerando erros sério quando utilizadas  -->
-                
-                <!-- <h5 class="mb-3">Configurações INSS</h5> 
-                <div id="configINSS">
                     
+                    <div class="mb-3">
+                        <div id="calculoDetalhado" class="calculation-steps">
+                            <h5 class="text-primary">Detalhamento dos cálculos realizados</h5>
+                            <!-- Detalhamento será inserido aqui -->
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-success mb-3" id="adicionarFaixaINSS">Adicionar Faixa INSS</button>
-                <h5 class="mb-3">Configurações IRRF</h5>
-                <div id="configIRRF">
-                    
+                
+                <!-- Aba Configurações -->
+                <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
+                    <p class="help-text mb-3">
+                        Aqui você pode ajustar as faixas e alíquotas do INSS e IRRF. Os valores de limite são em reais (R$), as alíquotas são em decimal (ex: 0.075 para 7,5%) e as deduções em reais.
+                    </p>
+                    <h5 class="mb-3">Alíquota Adicional</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Alíquota Adicional (%)</label>
+                        <input type="number" class="form-control" id="aliquotaAdicional" placeholder="Digite a alíquota adicional em %">
+                        <p class="help-text mt-1">
+                            Insira a alíquota adicional que pode ser ISSQN ou outra. Deixe em branco se não houver.
+                        </p>
+                    </div>
+                    <h5 class="mb-3">CPP e outros</h5>
+                    <div class="mb-3">
+                        <label class="form-label">CPP e outros (%)</label>
+                        <input type="number" class="form-control" id="cppAliquota" placeholder="Digite a alíquota do CPP e outros em % (padrão 20%)" value="20">
+                        <p class="help-text mt-1">
+                            Insira a alíquota referente ao CPP e outros encargos que a UFJF deverá recolher.
+                        </p>
+                    </div>
+                    <!-- Configurações atuais do INSS e IRRF estão desativadas no código original -->
+                    <!--
+                    <h5 class="mb-3">Configurações INSS</h5> 
+                    <div id="configINSS"></div>
+                    <button class="btn btn-success mb-3" id="adicionarFaixaINSS">Adicionar Faixa INSS</button>
+                    <h5 class="mb-3">Configurações IRRF</h5>
+                    <div id="configIRRF"></div>
+                    <button class="btn btn-success mb-3" id="adicionarFaixaIRRF">Adicionar Faixa IRRF</button>
+                    -->
                 </div>
-                <button class="btn btn-success mb-3" id="adicionarFaixaIRRF">Adicionar Faixa IRRF</button> -->
-            </div>
-            <!-- Conteúdo da nova aba Gráfico -->
-            <div class="tab-pane fade" id="grafico" role="tabpanel" aria-labelledby="grafico-tab">
-                <!-- Texto explicativo -->
-                <p class="mt-3">
-                    <strong>Observação:</strong> Este gráfico não considera nenhuma alíquota adicional e serve apenas para consulta ou estimativa rápida.
-                </p>
-                <canvas id="graficoBrutoLiquido"></canvas>
+                
+                <!-- Aba Gráfico -->
+                <div class="tab-pane fade" id="grafico" role="tabpanel" aria-labelledby="grafico-tab">
+                    <p class="mt-3">
+                        <strong>Observação:</strong> Este gráfico não considera nenhuma alíquota adicional e serve apenas para consulta ou estimativa rápida.
+                    </p>
+                    <canvas id="graficoBrutoLiquido"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -377,7 +181,7 @@
                     <a href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2024" target="_blank">Tabela de IRRF 2024 (dez/2024)</a>
                 </li>
                 <li>
-                    <a href="https://www.gov.br/inss/pt-br/noticias/confira-como-ficaram-as-aliquotas-de-contribuicao-ao-inss" target="_blank">Tabela de Alíquotas INSS (jan/2025)</a>
+                    <a href="https://www.planalto.gov.br/ccivil_03/leis/l8212cons.htm" target="_blank">Tabela de Alíquotas INSS (jan/2025)</a>
                 </li>
             </ul>
             <p class="card-text">
@@ -387,462 +191,18 @@
     </div>
 </div>
 
-<!-- Modal para editar faixas (opcional) -->
-<!-- ... -->
-
+<!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Inclusão da biblioteca Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-$(document).ready(function() {
-    // Configuração inicial
-    let config = {
-        inss: [
-            { lower: 0.00, upper: 1518.00, aliquota: 0.075 },
-            { lower: 1518.01, upper: 2793.88, aliquota: 0.09 },
-            { lower: 2793.89, upper: 4190.83, aliquota: 0.12 },
-            { lower: 4190.84, upper: 8157.41, aliquota: 0.14 }
-        ],
-        irrf: [
-            { lower: 0.00, upper: 2259.20, aliquota: 0.0, deducao: 0.00 },
-            { lower: 2259.21, upper: 2826.65, aliquota: 0.075, deducao: 169.44 },
-            { lower: 2826.66, upper: 3751.05, aliquota: 0.15, deducao: 381.44 },
-            { lower: 3751.06, upper: 4664.68, aliquota: 0.225, deducao: 662.77 },
-            { lower: 4664.69, upper: Infinity, aliquota: 0.275, deducao: 896.00 }
-        ],
-        cppAliquota: 20 // Valor padrão de 20%
-    };
+<!-- Arquivos JS modularizados -->
+<script src="js/config.js"></script>
+<script src="js/tax-calculator.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui-controller.js"></script>
+<script src="js/chart-controller.js"></script>
+<script src="js/main.js"></script>
 
-    // Função para salvar configurações no localStorage
-    function salvarConfiguracoes() {
-        localStorage.setItem('configCalculadora', JSON.stringify(config));
-    }
-
-    // Função para carregar configurações do localStorage
-    function carregarConfiguracoes() {
-        const configSalva = localStorage.getItem('configCalculadora');
-        if (configSalva) {
-            config = JSON.parse(configSalva);
-        }
-    }
-
-    // Carregar configurações ao iniciar
-    // carregarConfiguracoes(); //Tive que desativar porque estava gerando um erro na hora de carregar as configurações se o usuário editasse alguma coisa
-
-    // Carregar valores do formulário do localStorage
-    function carregarFormulario() {
-        const salario = localStorage.getItem('salario');
-        const modo = localStorage.getItem('modo');
-        const aliquotaAdicional = localStorage.getItem('aliquotaAdicional');
-        const cppAliquota = localStorage.getItem('cppAliquota');
-
-        if (salario) $('#salario').val(salario);
-        if (modo) $(`input[name="modo"][id="${modo}"]`).prop('checked', true);
-        if (aliquotaAdicional) $('#aliquotaAdicional').val(aliquotaAdicional);
-        if (cppAliquota) $('#cppAliquota').val(cppAliquota);
-    }
-
-    carregarFormulario();
-
-    // Atualizar a UI de configuração do INSS
-    function atualizarConfigINSS() {
-        $('#configINSS').empty();
-        config.inss.forEach((faixa, index) => {
-            $('#configINSS').append(`
-                <div class="card mb-2" data-index="${index}">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="faixa-header">Faixa INSS ${index + 1}</h6>
-                            <span class="remove-faixa" data-tipo="inss" data-index="${index}">&times;</span>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Limite Inferior (R$)</label>
-                                <input type="number" class="form-control inss-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="0.01">
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Limite Superior (R$)</label>
-                                <input type="number" class="form-control inss-upper" data-index="${index}" value="${faixa.upper === Infinity ? '' : faixa.upper.toFixed(2)}" step="0.01">
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Alíquota (decimal)</label>
-                                <input type="number" class="form-control inss-aliquota" data-index="${index}" value="${faixa.aliquota}" step="0.001">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `);
-        });
-    }
-
-    // Atualizar a UI de configuração do IRRF
-    function atualizarConfigIRRF() {
-        $('#configIRRF').empty();
-        config.irrf.forEach((faixa, index) => {
-            $('#configIRRF').append(`
-                <div class="card mb-2" data-index="${index}">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="faixa-header">Faixa IRRF ${index + 1}</h6>
-                            <span class="remove-faixa" data-tipo="irrf" data-index="${index}">&times;</span>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Limite Inferior (R$)</label>
-                                <input type="number" class="form-control irrf-lower" data-index="${index}" value="${(faixa.lower ?? 0).toFixed(2)}" step="1">
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Limite Superior (R$)</label>
-                                <input type="number" class="form-control irrf-upper" data-index="${index}" value="${faixa.upper === Infinity ? '' : faixa.upper.toFixed(2)}" step="1">
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Alíquota (decimal)</label>
-                                <input type="number" class="form-control irrf-aliquota" data-index="${index}" value="${faixa.aliquota}" step="1">
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Dedução (R$)</label>
-                                <input type="number" class="form-control irrf-deducao" data-index="${index}" value="${faixa.deducao.toFixed(2)}" step="1">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `);
-        });
-    }
-
-    // Função para calcular o INSS de forma progressiva
-    function calcularInssProgressivo(salario) {
-        let inssTotal = 0;
-        let detalhes = '';
-
-        for (const faixa of config.inss) {
-            if (salario > faixa.lower) {
-                const salarioFaixa = Math.min(salario, faixa.upper) - faixa.lower;
-                const contribuicao = salarioFaixa * faixa.aliquota;
-                inssTotal += contribuicao;
-                detalhes += `(${faixa.lower.toFixed(2)} - ${faixa.upper === Infinity ? '∞' : faixa.upper.toFixed(2)}) x ${(faixa.aliquota * 100).toFixed(1)}% = R$ ${contribuicao.toFixed(2)}<br>`;
-            }
-        }
-
-        return { total: inssTotal, detalhes: detalhes };
-    }
-
-    // Função para calcular o IRRF de forma detalhada semelhante ao INSS
-    function calcularIrrfDetalhado(base) {
-        let irrfTotal = 0;
-        let detalhes = '';
-
-        for (const faixa of config.irrf) {
-            if (base > faixa.lower) {
-                const salarioFaixa = Math.min(base, faixa.upper) - faixa.lower;
-                const impostoFaixa = salarioFaixa * faixa.aliquota;
-                irrfTotal += impostoFaixa;
-                detalhes += `(${faixa.lower.toFixed(2)} - ${faixa.upper === Infinity ? '∞' : faixa.upper.toFixed(2)}) x ${(faixa.aliquota * 100).toFixed(1)}% = R$ ${impostoFaixa.toFixed(2)}<br>`;
-            }
-        }
-
-        // Caso o valor seja maior que a última faixa
-        if (base > config.irrf[config.irrf.length - 1].lower) {
-            const faixa = config.irrf[config.irrf.length - 1];
-            irrfTotal = base * faixa.aliquota - faixa.deducao;
-        }
-
-        // Garantir que não seja negativo
-        irrfTotal = Math.max(0, irrfTotal);
-
-        return { total: irrfTotal, detalhes: detalhes };
-    }
-
-    // Função para calcular o valor bruto a partir do valor líquido desejado
-    function calcularBrutoAPartirDeLiquido(valorLiquido, considerarAliquotaAdicional = false) {
-        let salarioBruto = valorLiquido;
-        let diferencaLiquido = Infinity;
-        let iteracoes = 0;
-        const maxIteracoes = 1000;
-        const aliquotaAdicionalInput = considerarAliquotaAdicional ? $('#aliquotaAdicional').val() : '';
-        const aliquotaAdicional = aliquotaAdicionalInput ? parseFloat(aliquotaAdicionalInput) / 100 : 0;
-
-        while (Math.abs(diferencaLiquido) > 0.01 && iteracoes < maxIteracoes) {
-            const inssObj = calcularInssProgressivo(salarioBruto);
-            const irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-            const adicionalTotal = salarioBruto * aliquotaAdicional;
-            const liquidoCalculado = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
-            diferencaLiquido = valorLiquido - liquidoCalculado;
-            salarioBruto += diferencaLiquido / 2;
-            iteracoes++;
-        }
-
-        return salarioBruto;
-    }
-
-    // Função para gerar os dados do gráfico
-    function gerarDadosGrafico() {
-        const valoresLiquidos = [];
-        const valoresBrutos = [];
-        const valoresINSS = [];
-        const valoresIRRF = [];
-        const valoresCPP = [];
-
-        for (let valorLiquido = 1000; valorLiquido <= 50000; valorLiquido += 1000) {
-            valoresLiquidos.push(valorLiquido);
-            let salarioBruto = calcularBrutoAPartirDeLiquido(valorLiquido, false);
-            valoresBrutos.push(salarioBruto);
-
-            // Calcular INSS e IRRF para o salário bruto
-            let inssObj = calcularInssProgressivo(salarioBruto);
-            let irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-            valoresINSS.push(inssObj.total);
-            valoresIRRF.push(irrfObj.total);
-
-            // Calcular CPP
-            const cppAliquota = parseFloat($('#cppAliquota').val()) / 100 || 0.2; // Valor padrão de 20%
-            const cppValor = salarioBruto * cppAliquota;
-            valoresCPP.push(cppValor);
-        }
-
-        return { valoresLiquidos, valoresBrutos, valoresINSS, valoresIRRF, valoresCPP };
-    }
-
-    // Função para renderizar o gráfico
-    function renderizarGrafico() {
-        const { valoresLiquidos, valoresBrutos, valoresINSS, valoresIRRF, valoresCPP } = gerarDadosGrafico();
-
-        const ctx = document.getElementById('graficoBrutoLiquido').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: valoresLiquidos,
-                datasets: [
-                    {
-                        label: 'Valor Bruto Calculado',
-                        data: valoresBrutos,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: false
-                    },
-                    {
-                        label: 'Desconto INSS',
-                        data: valoresINSS,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2,
-                        fill: false
-                    },
-                    {
-                        label: 'Desconto IRRF',
-                        data: valoresIRRF,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2,
-                        fill: false
-                    },
-                    {
-                        label: 'Valor CPP',
-                        data: valoresCPP,
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        borderWidth: 2,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                stacked: false,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Valor Líquido Desejado (R$)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Valores (R$)'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    function calcularSalario() {
-    const modo = $('input[name="modo"]:checked').attr('id');
-    const valor = parseFloat($('#salario').val()) || 0;
-    const aliquotaAdicionalInput = $('#aliquotaAdicional').val();
-    const aliquotaAdicional = aliquotaAdicionalInput ? parseFloat(aliquotaAdicionalInput) / 100 : 0;
-
-    // Salvar valores no localStorage
-    localStorage.setItem('salario', $('#salario').val());
-    localStorage.setItem('modo', modo);
-    localStorage.setItem('aliquotaAdicional', aliquotaAdicionalInput);
-    localStorage.setItem('cppAliquota', $('#cppAliquota').val());
-
-    let salarioBruto, salarioLiquido, inssObj, irrfObj, adicionalTotal;
-    let detalhesCalculo = '';
-
-    if (modo === 'calcularBruto') {
-        salarioLiquido = valor;
-        salarioBruto = calcularBrutoAPartirDeLiquido(salarioLiquido, true);
-        inssObj = calcularInssProgressivo(salarioBruto);
-        irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-        adicionalTotal = salarioBruto * aliquotaAdicional;
-
-        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
-        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
-    } else {
-        salarioBruto = valor;
-        inssObj = calcularInssProgressivo(salarioBruto);
-        irrfObj = calcularIrrfDetalhado(salarioBruto - inssObj.total);
-        adicionalTotal = salarioBruto * aliquotaAdicional;
-        salarioLiquido = salarioBruto - inssObj.total - irrfObj.total - adicionalTotal;
-
-        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do INSS:</h6>${inssObj.detalhes}</div>`;
-        detalhesCalculo += `<div class="calculation-section"><h6>Cálculo do IRRF:</h6>${irrfObj.detalhes}</div>`;
-    }
-
-    detalhesCalculo += `<div class="calculation-section"><h6>Cálculo da Alíquota Adicional:</h6>`;
-    if (aliquotaAdicional > 0) {
-        detalhesCalculo += `Valor Bruto x ${(aliquotaAdicional * 100).toFixed(2)}% = R$ ${adicionalTotal.toFixed(2)}<br></div>`;
-    } else {
-        detalhesCalculo += `Nenhuma alíquota adicional aplicada.<br></div>`;
-    }
-
-    $('#calculoDetalhado').html(detalhesCalculo);
-    $('#resultadoSalario').text(`R$ ${(modo === 'calcularBruto' ? salarioBruto : salarioLiquido).toFixed(2)}`);
-    $('#resultadoLabel').text(modo === 'calcularBruto' ? 'valor da requisição' : 'valor recebido pelo prestador');
-    $('#descontoINSS').text(`R$ ${inssObj.total.toFixed(2)}`);
-    $('#descontoIRRF').text(`R$ ${irrfObj.total.toFixed(2)}`);
-    $('#descontoAdicional').text(`R$ ${adicionalTotal ? adicionalTotal.toFixed(2) : '0.00'}`);
-
-    // Cálculo do CPP devido pela UFJF
-    const cppAliquota = parseFloat($('#cppAliquota').val()) / 100 || 0.2; // Valor padrão de 20%
-    const cppValor = salarioBruto * cppAliquota;
-    $('#cppValor').text(`R$ ${cppValor.toFixed(2)}`);
-
-    // Cálculo do Somatório Total
-    const somatorioTotal = cppValor + (modo === 'calcularBruto' ? salarioBruto : salarioLiquido);
-    $('#somatorioTotal').text(`R$ ${somatorioTotal.toFixed(2)}`);
-}
-
-
-    // Função para calcular e exibir o somatório total
-    function calcularSomatorio() {
-        const cppValor = parseFloat(document.getElementById('cppValor').innerText.replace('R$', '').replace(',', '.')) || 0;
-        const resultadoSalario = parseFloat(document.getElementById('resultadoSalario').innerText.replace('R$', '').replace(',', '.')) || 0;
-        const somatorio = cppValor + resultadoSalario;
-        document.getElementById('somatorioTotal').innerText = somatorio;
-    }
-
-
-
-    // Inicialização das configurações
-    atualizarConfigINSS();
-    atualizarConfigIRRF();
-
-    // Event listeners para cálculo
-    $('#salario, input[name="modo"], #aliquotaAdicional, #cppAliquota').on('input change', function() {
-    // Atualizar o rótulo e placeholder do campo de salário
-    if ($('#calcularBruto').is(':checked')) {
-        $('#labelSalario').text('Valor líquido acordado com o prestador (R$)');
-        $('#salario').attr('placeholder', 'Digite o valor líquido que você deseja alcançar');
-        $('#helpTextSalario').text('Informe o valor líquido desejado. O sistema calculará o valor bruto necessário considerando os impostos aplicáveis.');
-        $('#resultadoLabel').text('Valor Bruto Necessário (R$)');
-    } else {
-        $('#labelSalario').text('Orçamento disponibilizado para a requisição (valor bruto) (R$)');
-        $('#salario').attr('placeholder', 'Digite o valor bruto que foi disponibilizado para realizar o pagamento');
-        $('#helpTextSalario').text('Informe o valor bruto disponibilizado. O sistema calculará o valor líquido final após descontos de impostos.');
-        $('#resultadoLabel').text('Valor Líquido Recebido (R$)');
-    }
-    calcularSalario();
-});
-
-
-    // Event listener para mostrar/ocultar ajuda
-    $('#mostrarAjuda').change(function() {
-        $('.help-text').toggle(this.checked);
-    });
-
-    // Event listeners para alterações nas faixas INSS
-    $('#configINSS').on('input', '.inss-lower, .inss-upper, .inss-aliquota', function() {
-        const index = $(this).data('index');
-        const lower = parseFloat($(`.inss-lower[data-index="${index}"]`).val()) || 0;
-        const upperVal = $(`.inss-upper[data-index="${index}"]`).val();
-        const upper = upperVal === '' ? Infinity : parseFloat(upperVal);
-        const aliquota = parseFloat($(`.inss-aliquota[data-index="${index}"]`).val()) || 0;
-
-        config.inss[index].lower = lower;
-        config.inss[index].upper = upper;
-        config.inss[index].aliquota = aliquota;
-
-        salvarConfiguracoes();
-        calcularSalario();
-    });
-
-    // Event listeners para alterações nas faixas IRRF
-    $('#configIRRF').on('input', '.irrf-lower, .irrf-upper, .irrf-aliquota, .irrf-deducao', function() {
-        const index = $(this).data('index');
-        const lower = parseFloat($(`.irrf-lower[data-index="${index}"]`).val()) || 0;
-        const upperVal = $(`.irrf-upper[data-index="${index}"]`).val();
-        const upper = upperVal === '' ? Infinity : parseFloat(upperVal);
-        const aliquota = parseFloat($(`.irrf-aliquota[data-index="${index}"]`).val()) || 0;
-        const deducao = parseFloat($(`.irrf-deducao[data-index="${index}"]`).val()) || 0;
-
-        config.irrf[index].lower = lower;
-        config.irrf[index].upper = upper;
-        config.irrf[index].aliquota = aliquota;
-        config.irrf[index].deducao = deducao;
-
-        salvarConfiguracoes();
-        calcularSalario();
-    });
-
-    // Função para remover faixas
-    $('#configINSS, #configIRRF').on('click', '.remove-faixa', function() {
-        const tipo = $(this).data('tipo');
-        const index = $(this).data('index');
-
-        if (tipo === 'inss') {
-            config.inss.splice(index, 1);
-            atualizarConfigINSS();
-        } else if (tipo === 'irrf') {
-            config.irrf.splice(index, 1);
-            atualizarConfigIRRF();
-        }
-
-        salvarConfiguracoes();
-        calcularSalario();
-    });
-
-    // Função para adicionar faixas INSS
-    $('#adicionarFaixaINSS').click(function() {
-        config.inss.push({ lower: 0.00, upper: Infinity, aliquota: 0.0 });
-        atualizarConfigINSS();
-        salvarConfiguracoes();
-    });
-
-    // Função para adicionar faixas IRRF
-    $('#adicionarFaixaIRRF').click(function() {
-        config.irrf.push({ lower: 0.00, upper: Infinity, aliquota: 0.0, deducao: 0.0 });
-        atualizarConfigIRRF();
-        salvarConfiguracoes();
-    });
-
-    // Renderizar o gráfico ao clicar na aba Gráfico
-    $('#grafico-tab').on('shown.bs.tab', function () {
-        renderizarGrafico();
-    });
-
-    // Iniciar o cálculo
-    calcularSalario();
-});
-</script>
 </body>
 </html>

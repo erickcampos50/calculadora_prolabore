@@ -1,0 +1,37 @@
+/* main.css - Estilos gerais da aplicação */
+
+.help-text {
+    display: none;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.faixa-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.remove-faixa {
+    cursor: pointer;
+    color: red;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .calculation-steps {
+        padding: 15px;
+    }
+
+    .calculation-section {
+        padding: 10px;
+    }
+
+    .calculation-section h6 {
+        font-size: 1rem;
+    }
+
+    .calculation-section p,
+    .calculation-section div {
+        font-size: 0.9rem;
+    }
+}
